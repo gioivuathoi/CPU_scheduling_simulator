@@ -26,12 +26,12 @@ typedef struct _process
     int completed;         // Trạng thái của tiến trình
 } Process;
 
-typedef int Quantum; // 시간 할당량 Quantum 키워드 사용
+typedef int Quantum; // Sử dụng từ khóa 'Quantum' cho thời gian cung cấp
 
 /**
- * [process_init 프로세스 초기화 함수]
- * @param p   [프로세스 구조체 배열]
- * @param len [프로세스 갯수]
+ * [process_init hàm khởi tạo tiến trình]
+ * @param p   [mảng cấu trúc tiến trình]
+ * @param len [số lượng tiến trình]
  */
 
 /* Hàm khởi tạo các process */
@@ -42,10 +42,10 @@ void process_init(Process p[], int len)
     /* Sẽ khởi tạo */
     for (i = 0; i < len; i++)
     {
-        p[i].waiting_time = 0;   // 대기 시간 초기화
-        p[i].return_time = 0;    // 반환 시간 초기화
-        p[i].response_time = 0;  // 응답 시간 초기화
-        p[i].completed = FALSE;  // 완료 상태 초기화
+        p[i].waiting_time = 0;   // Khởi tạo thời gian chờ
+        p[i].return_time = 0;    // Khởi tạo thời gian trả về
+        p[i].response_time = 0;  // Khởi tạo thời gian phản hồi
+        p[i].completed = FALSE;  // Khởi tạo trạng thái hoàn thành
     }
 }
 
