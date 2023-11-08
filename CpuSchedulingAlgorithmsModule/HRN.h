@@ -99,7 +99,7 @@ void HRN(Process *p, int len)
 	// hrr Khai báo một biến để lưu trữ mức độ ưu tiên của thuật toán
 
 	process_init(p, len);
-	// process_init khởi tạo một tiến trình bằng lệnh gọi hàm
+	// khởi tạo một tiến trình bằng lệnh gọi hàm process_init
 
 	/* lặp lại nhiều lần bằng số lượng tiến trình */
 	for (i = 0; i < len; i++)
@@ -109,7 +109,7 @@ void HRN(Process *p, int len)
 	}
 
 	merge_sort_by_arrive_time(p, 0, len);
-	// merge_sort_by_arrive_time sắp xếp thời gian đến với lệnh gọi hàm
+	// sắp xếp thời gian đến với lệnh gọi hàm merge_sort_by_arrive_time
 
 	/* Lặp lại cho đến khi thời gian hiện tại bằng tổng thời gian thực hiện */
 	for (time = p[0].arrive_time; time < total_burst_time;)
@@ -157,12 +157,12 @@ void HRN(Process *p, int len)
 	}
 
 	quick_sort_by_return_time(p, len);
-	// quick_sort_by_return_time Sắp xếp thời gian trả về theo lệnh gọi hàm
+	// Sắp xếp thời gian trả về theo lệnh gọi hàm quick_sort_by_return_time
 
 	printf("\tHighest Response Ratio Next Scheduling Algorithm\n\n");
 
 	hrn_print_gantt_chart(p, len);
-	// hrn_print_gantt_chart In biểu đồ Gantt với lệnh gọi hàm
+	// In biểu đồ Gantt với lệnh gọi hàm hrn_print_gantt_chart
 
 	/* Thời gian chờ trung bình, thời gian hoàn thành, thời gian đáp ứng đầu ra */
 	printf("\n\tAverage Waiting Time     : %-2.2lf\n", (double)total_waiting_time / (double)len);
