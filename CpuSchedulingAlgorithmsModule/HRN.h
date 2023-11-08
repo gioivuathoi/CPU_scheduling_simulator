@@ -3,24 +3,24 @@
 
 // HRN Algorithm
 
-/* 사용자 정의 헤더 선언 */
+/* Khai báo tiêu đề tuỳ chỉnh */
 #include "./Process.h"
 #include "./SortingFunction.h"
 #include "./PrintTable.h"
 
 /**
- * [hrn_print_gantt_chart 간트 차트 출력 함수]
- * @param p   [프로세스 구조체 배열]
- * @param len [프로세스 갯수]
+ * [hrn_print_gantt_chart Hàm hiển thị biểu đồ Gantt]
+ * @param p   [mảng cấu thúc tiến trình]
+ * @param len [số lượng tiến trình]
  */
 void hrn_print_gantt_chart(Process *p, int len)
 {
 	int i, j;
-	// 반복문에서 사용할 변수 선언
+	// khai báo các biến sử dụng trong vòng lặp
 
 	printf("\t ");
 
-	/* 상단 바 출력 */
+	/* hiển thị thanh đầu trang */
 	for (i = 0; i < len; i++)
 	{
 		for (j = 0; j < p[i].burst; j++)
@@ -31,7 +31,7 @@ void hrn_print_gantt_chart(Process *p, int len)
 
 	printf("\n\t|");
 
-	/* 프로세스 ID 출력 */
+	/* hiển thị ID tiến trình */
 	for (i = 0; i < len; i++)
 	{
 		for (j = 0; j < p[i].burst - 1; j++)
@@ -47,7 +47,7 @@ void hrn_print_gantt_chart(Process *p, int len)
 
 	printf("\n\t ");
 
-	/* 하단 바 출력 */
+	/* hiển thị thanh dưới cùng */
 	for (i = 0; i < len; i++)
 	{
 		for (j = 0; j < p[i].burst; j++)
@@ -58,7 +58,7 @@ void hrn_print_gantt_chart(Process *p, int len)
 
 	printf("\n\t");
 
-	/* 프로세스 시간 출력 */
+	/* hiển thị thời gian tiến trình */
 	printf("0");
 
 	for (i = 0; i < len; i++)
@@ -76,72 +76,72 @@ void hrn_print_gantt_chart(Process *p, int len)
 }
 
 /**
- * [HRN HRN 알고리즘 실행 함수]
- * @param p   [프로세스 구조체 배열]
- * @param len [프로세스 갯수]
+ * [HRN HRN hàm thực thi thuật toán]
+ * @param p   [mảng cấu trúc tiến trình]
+ * @param len [số lượng tiến trình]
  */
 void HRN(Process *p, int len)
 {
 	int i, j;
-	// 반복문에서 사용할 변수 선언
+	// khai báo các biến sử dụng trong vòng lặp
 	int time, loc;
-	// 현재 시간과 프로세스 위치를 저장할 변수 선언
+	// Khai báo một biến để lưu trữ thời gian và vị trí tiến trình hiện tại
 	int total_burst_time = 0;
-	// 총 실행 시간을 저장할 변수 선언 및 초기화
+	// khai báo và khởi tạo một biến để lưu trữ tổng thời gian thực hiện
 	int total_waiting_time = 0;
-	// 총 대기 시간을 저장할 변수 선언 및 초기화
+	// khai báo và khởi tạo một biến để lưu tổng thời gian chờ
 	int total_turnaround_time = 0;
-	// 총 턴어라운드 타임을 저장할 변수 선언 및 초기화
+	// Khai báo và khởi tạo biến để lưu trữ thời gian hoàn thành toàn bộ quy trình
 	int total_response_time = 0;
-	// 총 응답 시간을 저장할 변수 선언 및 초기화
+	// Khai báo và khởi tạo biến để lưu trữ tổng thời gian phản hồi
 
 	float hrr, temp;
-	// hrr 알고리즘의 우선 순위를 저장할 변수 선언
+	// hrr Khai báo một biến để lưu trữ mức độ ưu tiên của thuật toán
 
 	process_init(p, len);
-	// process_init 함수 호출로 프로세스 초기화
+	// process_init khởi tạo một tiến trình bằng lệnh gọi hàm
 
-	/* 프로세스의 갯수만큼 반복 */
+	/* lặp lại nhiều lần bằng số lượng tiến trình */
 	for (i = 0; i < len; i++)
 	{
 		total_burst_time += p[i].burst;
-		// 총 실행 시간을 계산
+		// tổng thời gian thực hiện
 	}
 
 	merge_sort_by_arrive_time(p, 0, len);
-	// merge_sort_by_arrive_time 함수 호출로 도착 시간을 기준으로 정렬
+	// merge_sort_by_arrive_time sắp xếp thời gian đến với lệnh gọi hàm
 
-	/* 현재 시간이 총 실행 시간이 같아질 때까지 반복 */
+	/* Lặp lại cho đến khi thời gian hiện tại bằng tổng thời gian thực hiện */
 	for (time = p[0].arrive_time; time < total_burst_time;)
 	{
 		hrr = -9999;
-		// 우선순위를 -9999으로 초기화
+		// Đặt lại mức độ ưu tiên về -9999
 
-		/* 프로세스의 갯수만큼 반복 */
+		/* Lặp lại nhiều lần bằng số lượng tiến trình */
 		for (i = 0; i < len; i++)
 		{
-			/* 이미 도착한 프로세스이면서 완료되지 않은 프로세스인 경우 */
+			/* Nếu quá trình đã đến nhưng chưa hoàn thành */
 			if ((p[i].arrive_time <= time)
 					&& (p[i].completed != TRUE))
 			{
 				temp = (p[i].burst + (time - p[i].arrive_time)) / p[i].burst;
-				// (실행시간 + 대기시간) / 실행시간 으로 우선순위 계산
+				// (Tính toán mức độ ưu tiên dựa trên thời gian thực hiện + thời gian chờ)/thời gian thực hiện
 
-				/* 우선순위가 더 클 경우 */
+				/* Nếu mức độ ưu tiên cao hơn */
 				if (hrr < temp)
 				{
 					hrr = temp;
-					// 우선순위 값 갱신
+					// Cập nhật giá trị ưu tiên
 					loc = i;
-					// 인덱스 갱신
+					// Cập nhật chỉ mục
 				}
 			}
 		}
 
 		time += p[loc].burst;
-		// 실행한 프로세스 시간 만큼 현재 시간 증가
+		// Tăng thời gian hiện tại theo thời gian của tiến trình thực hiện
 
-		/* 실행 한 프로세스 시간 정보 계산 */
+		/* Tính toán thông tin thời gian tiến trình được thực hiện */
 		p[loc].waiting_time = time - p[loc].arrive_time - p[loc].burst;
 		p[loc].turnaround_time = time - p[loc].arrive_time;
 		p[loc].return_time = p[loc].turnaround_time + p[loc].arrive_time;
@@ -149,28 +149,28 @@ void HRN(Process *p, int len)
 		p[loc].completed = TRUE;
 
 		total_waiting_time += p[loc].waiting_time;
-		// 총 대기 시간 증가
+		// Tăng tổng thời gian chờ
 		total_turnaround_time += p[loc].turnaround_time;
-		// 총 턴어라운드 타임 증가
+		// Tăng tổng thời gian xử lý
 		total_response_time += p[loc].response_time;
-		// 총 응답 시간 증가
+		// Tăng tổng thời gian phản hồi
 	}
 
 	quick_sort_by_return_time(p, len);
-	// quick_sort_by_return_time 함수 호출로 반환 시간으로 정렬
+	// quick_sort_by_return_time Sắp xếp thời gian trả về theo lệnh gọi hàm
 
 	printf("\tHighest Response Ratio Next Scheduling Algorithm\n\n");
 
 	hrn_print_gantt_chart(p, len);
-	// hrn_print_gantt_chart 함수 호출로 간트 차트 출력
+	// hrn_print_gantt_chart In biểu đồ Gantt với lệnh gọi hàm
 
-	/* 평균 대기시간, 턴어라운드 타임, 응답 시간 출력 */
+	/* Thời gian chờ trung bình, thời gian hoàn thành, thời gian đáp ứng đầu ra */
 	printf("\n\tAverage Waiting Time     : %-2.2lf\n", (double)total_waiting_time / (double)len);
 	printf("\tAverage Turnaround Time  : %-2.2lf\n", (double)total_turnaround_time / (double)len);
 	printf("\tAverage Response Time    : %-2.2lf\n\n", (double)total_response_time / (double)len);
 
 	print_table(p, len);
-	// print_table 함수 호출로 데이터 표 출력
+	// In bảng dữ liệu bằng cách gọi hàm print_table
 }
 
 #endif
