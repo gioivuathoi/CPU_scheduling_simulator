@@ -9,7 +9,7 @@
 #include "./PrintTable.h"
 
 /**
- * [fcfs_print_gantt_chart chức năng xuất biểu đồ gantt]
+ * [fcfs_print_gantt_chart chức năng hiển thị biểu đồ gantt]
  * @param p   [mảng cấu trúc tiến trình]
  * @param len [số lượng tiến trình]
  */
@@ -95,10 +95,9 @@ void FCFS(Process *p, int len)
 	// khai báo và khởi tạo biến để lưu trữ tổng thời gian trả về
 
 	process_init(p, len);
-	// process_init khởi tạo một tiến trình bằng lệnh gọi hàm
-
+	// khởi tạo một tiến trình bằng lệnh gọi hàm process_init 
 	merge_sort_by_arrive_time(p, 0, len);
-	// merge_sort_by_arrive_time sắp xếp theo thời gian đến với lệnh gọi hàm
+	// sắp xếp theo thời gian đến với lệnh gọi hàm merge_sort_by_arrive_time 
 
 	/* thực thi tiến trình đầu tiên xuất hiện */
 	p[0].return_time = p[0].burst;
@@ -131,7 +130,7 @@ void FCFS(Process *p, int len)
 	printf("\n\tFCFS Scheduling Algorithm\n\n");
 
 	fcfs_print_gantt_chart(p, len);
-	// fcfs_print_gantt_chart in biểu đồ gantt với lệnh gọi hàm
+	// in biểu đồ gantt với lệnh gọi hàm fcfs_print_gantt_chart
 
 	/* thời gian chờ trung bình, thời gian hoàn thành, thời gian đáp ứng đầu ra */
 	printf("\n\tAverage Waiting Time     : %-2.2lf\n", (double)total_waiting_time / (double)len);
