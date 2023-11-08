@@ -3,24 +3,24 @@
 
 // Print Table
 
-/* 사용자 정의 헤더 선언 */
+/* Khai báo tiêu đề tùy chỉnh */
 #include "./Process.h"
 
 /**
- * [print_table 프로세스 데이터 테이블 출력 함수]
- * @param p [프로세스 구조체 배열]
- * @param n [프로세스 갯수]
+ * [print_table Chức năng hiển thị bảng dữ liệu tiến trình]
+ * @param p [mảng cấu trúc tiến trình]
+ * @param n [số lượng tiến trình]
  */
 void print_table(Process p[], int n)
 {
 	int i;
-	// 반복문에서 사용할 변수 선언
+	// Khai báo các biến sử dụng trong vòng lặp
 
 	puts("\t+-----+------------+-------------+----------+-------------+-----------------+--------------+-----------------+");
 	puts("\t| PID | Burst Time | Arrive Time | Priority | Return Time |  Response Time  | Waiting Time | Turnaround Time |");
 	puts("\t+-----+------------+-------------+----------+-------------+-----------------+--------------+-----------------+");
 
-	/* 프로세스 갯수만큼 반복하며 포맷을 맞추어 출력 */
+	/* Thực hiện lặp lại theo số lượng tiến trình và định dạng thông tin để in ra */
 	for (i = 0; i < n; i++)
 	{
 		printf("\t| %3s |     %3d    |     %3d     |    %3d   |     %3d     |      %3d        |      %3d     |        %3d      |\n",
