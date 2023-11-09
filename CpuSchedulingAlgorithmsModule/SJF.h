@@ -3,96 +3,96 @@
 
 // Shortest Job First Algorithmd
 
-/* 사용자 정의 헤더 선언 */
+/* Khai báo tiêu đề tùy chỉnh */
 #include "./Process.h"
 #include "./SortingFunction.h"
 #include "./PrintTable.h"
 
 /**
- * [sjf_calculate_time SJF 알고리즘 시간 계산 함수]
- * @param p   [프로세스 구조체 배열]
- * @param len [프로세스 갯수]
+ * [sjf_calculate_time Hàm tính toán thời gian thuật toán SJF]
+ * @param p   [mảng cấu trúc tiến trình]
+ * @param len [số lượng tiến trình]
  */
 void sjf_calculate_time(Process *p, int len)
 {
 	int i, j;
-	// 반복문에서 사용할 변수 선언
+	// Khai báo các biến sử dụng trong vòng lặp
 	int curr_time = 0;
-	// 현재 시간을 저장할 변수 선언 및 초기화
+	// Khai báo và khởi tạo một biến để lưu trữ thời gian hiện tại
 	int min = 0;
-	// 최소 시간을 갖는 인덱스를 저장할 변수 선언 및 초기화
+	// Khai báo và khởi tạo biến để lưu trữ chỉ số của phần tử có thời gian nhỏ nhất
 
-	/* 맨 처음에 실행되는 프로세스 시간 계산 */
+	/* Thời gian thực thi của tiến trình được thực hiện đầu tiên */
 	p[0].completed = TRUE;
 	p[0].return_time = p[0].burst;
 	p[0].turnaround_time = p[0].burst - p[0].arrive_time;
 	p[0].waiting_time = 0;
 	
 	curr_time = p[0].burst;
-	// 현재 시간 완료된 프로세스 시간 만큼 증가
+	// Tăng thời gian hiện tại lên theo thời gian của tiến trình đã hoàn thành
 
-	/* 프로세스의 갯수 -1 만큼 반복 */
+	/* Duyệt qua số lượng tiến trình - 1 lần */
 	for(i = 1; i < len; i++)
 	{
-		/* 프로세스의 갯수 -1 만큼 반복 */
+		/* Duyệt qua số lượng tiến trình -1 */
 		for (j = 1; j < len; j++)
 		{
-			/* 이미 완료된 프로세스일 경우 */
+			/* Nếu quá trình này đã được hoàn thành */
 			if (p[j].completed == TRUE)
 				continue;
-				// 다음 루프로 이동
+				// Đi tới vòng lặp tiếp theo
 
-			/* 아직 완료되지 않은 프로세스일 경우 */
+			/* Nếu quá trình này vẫn chưa hoàn tất */
 			else
 			{
 				min = j;
-				// min 변수 초기화
+				// khởi tạo biến min 
 				break;
-				// 반복문 탈출
+				// thoát vòng lặp
 			}
 		}
 
-		/* 프로세스의 갯수 -1 만큼 반복 */
+		/* Duyệt qua số lượng tiến trình -1 */
 		for (j = 1; j < len; j++)
 		{
-			/* 최소 작업 시간을 갖는 조건에 맞는 프로세스 탐색 */
+			/* Tìm kiếm tiến trình thỏa mãn điều kiện có thời gian thực hiện nhỏ nhất */
 			if ((p[j].completed == FALSE)
 					&& (p[j].arrive_time <= curr_time)
 						&& (p[j].burst < p[min].burst))
 			{
 				min = j;
-				// 최소 작업 프로세스 갱신
+				// Cập nhật tiến trình có thời gian thực hiện nhỏ nhất
 			}
 		}
 
 		p[min].waiting_time = curr_time - p[min].arrive_time;
-		// 실행할 프로세스 대기 시간 계산
+		// Tính thời gian chờ tiến trình để chạy
 		p[min].completed = TRUE;
-		// 실행 프로세스 완료 상태 변경
+		// Thay đổi trạng thái của tiến trình được thực thi sang trạng thái hoàn thành
 
 		curr_time += p[min].burst;
-		// 현재 시간 프로세스의 실행 시간만큼 증가
+		// Tăng thời gian hiện tại lên theo thời gian thực hiện của tiến trình
 
 		p[min].return_time = curr_time;
-		// 프로세스 반환 시간 계산
+		// Tính toán thời gian trả về của tiến trình
 		p[min].turnaround_time = p[min].return_time - p[min].arrive_time;
-		// 프로세스 턴어라운드 타임 계산
+		// Tính toán thời gian turnaround của tiến trình
 	}
 }
 
 /**
- * [sjf_print_gantt_chart 간트 차트 출력 함수]
- * @param p   [프로세스 구조체 배열]
- * @param len [프로세스 갯수]
+ * [sjf_print_gantt_chart Hàm hiển thị biểu đồ Gantt]
+ * @param p   [mảng cấu trúc tiến trình]
+ * @param len [số lượng tiến trình]
  */
 void sjf_print_gantt_chart(Process *p, int len)
 {
 	int i, j;
-	// 반복문에서 사용할 변수 선언
+	// Khai báo các biến sử dụng trong vòng lặp
 
 	printf("\t ");
 
-	/* 상단 바 출력 */
+	/* đầu ra thanh trên cùng */
 	for (i = 0; i < len; i++)
 	{
 		for (j = 0; j < p[i].burst; j++)
@@ -103,7 +103,7 @@ void sjf_print_gantt_chart(Process *p, int len)
 
 	printf("\n\t|");
 
-	/* 프로세스 ID 출력 */
+	/* Đầu ra ID tiến trình */
 	for (i = 0; i < len; i++)
 	{
 		for (j = 0; j < p[i].burst - 1; j++)
@@ -119,7 +119,7 @@ void sjf_print_gantt_chart(Process *p, int len)
 
 	printf("\n\t ");
 
-	/* 하단 바 출력 */
+	/* đầu ra thanh dưới cùng */
 	for (i = 0; i < len; i++)
 	{
 		for (j = 0; j < p[i].burst; j++)
@@ -132,7 +132,7 @@ void sjf_print_gantt_chart(Process *p, int len)
 
 	printf("0");
 
-	/* 프로세스 실행 시간 출력 */
+	/* Đầu ra thời gian thực hiện tiến trình */
 	for (i = 0; i < len; i++)
 	{
 		for (j = 0; j < p[i].burst; j++)
@@ -148,61 +148,61 @@ void sjf_print_gantt_chart(Process *p, int len)
 }
 
 /**
- * [SJF SJF 알고리즘 실행 함수]
- * @param p   [프로세스 구조체 배열]
- * @param len [프로세스 갯수]
+ * [SJF SJF hàm thực thi thuật toán]
+ * @param p   [mảng cấu trúc tiến trình]
+ * @param len [số lượng tiến trình]
  */
 void SJF(Process *p, int len)
 {
 	int i;
-	// 반복문에서 사용할 변수 선언
+	// Khai báo biến để sử dụng trong vòng lặp
 	int total_waiting_time = 0;
-	// 총 대기 시간을 저장할 변수 선언 및 초기화
+	// Khai báo và khởi tạo một biến để lưu tổng thời gian chờ
 	int total_turnaround_time = 0;
-	// 총 턴어라운드 타임을 저장할 변수 선언 및 초기화
+	// Khai báo và khởi tạo biến để lưu trữ tổng thời gian turnaround
 	int total_response_time = 0;
-	// 총 응답 시간을 저장할 변수 선언 및 초기화
+	// Khai báo và khởi tạo biến để lưu trữ tổng thời gian phản hồi
 
 	process_init(p, len);
-	// process_init 함수 호출로 프로세스 초기화
+	// Gọi hàm process_init() để khởi tạo các tiến trình
 
 	merge_sort_by_arrive_time(p, 0, len);
-	// merge_sort_by_arrive_time 함수 호출로 도착 시간을 기준으로 정렬
+	// Gọi hàm merge_sort_by_arrive_time() để sắp xếp các tiến trình theo thời gian đến
 
 	sjf_calculate_time(p, len);
-	// sjf_calculate_time 함수 호출로 프로세스 시간 계산
+	// Gọi hàm sjf_calculate_time() để tính thời gian của các tiến trình
 
-	/* 프로세스의 갯수 만큼 반복 */
+	/* Lặp lại theo số lượng tiến trình */
 	for (i = 0; i < len; i++)
 	{
 		p[i].return_time = p[i].turnaround_time + p[i].arrive_time;
-		// 프로세스의 반환 시간 계산 후 저장
+		// Tính toán và lưu trữ thời gian trả về của tiến trình
 		p[i].response_time = p[i].waiting_time;
-		// 프로세스의 응답 시간 저장
+		// Lưu trữ thời gian phản hồi của tiến trình
 
 		total_waiting_time += p[i].waiting_time;
-		// 총 대기 시간 증가
+		// Tăng tổng thời gian chờ lên
 		total_turnaround_time += p[i].turnaround_time;
-		// 총 턴어라운드 타임 증가
+		// Tăng tổng thời gian turnaround lên
 		total_response_time += p[i].response_time;
-		// 총 응답 시간 증가
+		// Tăng tổng thời gian phản hồi lên
 	}
 
 	printf("\tSJF Scheduling Algorithms\n\n");
 
 	quick_sort_by_return_time(p, len);
-	// quick_sort_by_return_time 함수 호출로 반환 시간으로 정렬
+	// Gọi hàm quick_sort_by_return_time() để sắp xếp các tiến trình theo thời gian trả về
 
 	sjf_print_gantt_chart(p, len);
-	// sjf_print_gantt_chart 함수 호출로 간트 차트 출력
+	// Gọi hàm sjf_print_gantt_chart() để in biểu đồ Gantt
 
-	/* 평균 대기시간, 턴어라운드 타임, 응답 시간 출력 */
+	/* In ra thời gian chờ trung bình, thời gian turnaround trung bình và thời gian phản hồi trung bình */
 	printf("\n\tAverage Waiting Time     : %-2.2lf\n", (double)total_waiting_time / (double)len);
 	printf("\tAverage Turnaround Time  : %-2.2lf\n", (double)total_turnaround_time / (double)len);
 	printf("\tAverage Response Time    : %-2.2lf\n\n", (double)total_response_time / (double)len);
 
 	print_table(p, len);
-	// print_table 함수 호출로 데이터 표 출력
+	// Gọi hàm print_table() để in bảng dữ liệu
 }
 
 #endif
