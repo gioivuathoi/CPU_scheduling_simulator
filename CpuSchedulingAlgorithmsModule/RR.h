@@ -422,9 +422,9 @@ void RR(Process *p, int len, Quantum quantum)
 	// rr_print_gantt_chart 함수 호출로 간트 차트 출력
 
 	/* 평균 대기시간, 턴어라운드 타임, 응답 시간 출력 */
-	printf("\n\tAverage Waiting Time     : %-2.2lf\n", (double)total_waiting_time / (double)len);
-	printf("\tAverage Turnaround Time  : %-2.2lf\n", (double)total_turnaround_time / (double)len);
-	printf("\tAverage Response Time    : %-2.2lf\n\n", (double)total_response_time / (double)len);
+	// printf("\n\tAverage Waiting Time     : %-2.2lf\n", (double)total_waiting_time / (double)len);
+	// printf("\tAverage Turnaround Time  : %-2.2lf\n", (double)total_turnaround_time / (double)len);
+	// printf("\tAverage Response Time    : %-2.2lf\n\n", (double)total_response_time / (double)len);
 
 	print_table(p, len);
 	// print_table 함수 호출로 데이터 표 출력

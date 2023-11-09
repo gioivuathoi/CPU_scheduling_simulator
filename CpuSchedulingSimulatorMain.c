@@ -37,10 +37,10 @@ int main()
 
     fscanf(fp, " %d", &process_count);
     // 파일에서 정수형 데이터를 읽어와 process_count에 저장
-
+    printf("Number of process: %d ", process_count);
     /* process_count 갯수만큼 프로세스 구조체 배열 동적 할당 */
     process = (Process *)malloc(sizeof(Process) * process_count);
-
+    printf("Done create process!");
     /* 프로세스 갯수만큼 반복 */
     while (i < process_count)
     {
