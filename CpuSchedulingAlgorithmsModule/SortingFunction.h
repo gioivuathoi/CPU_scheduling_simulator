@@ -3,135 +3,134 @@
 
 // Sorting Function
 
-/* 사용자 정의 헤더 선언 */
+/* Khai báo tiêu đề tuỳ chỉnh  */
 #include "./Process.h"
 
 /**
- * [compare_by_return_time 반환 시간 기준 비교 함수]
- * @param  a [프로세스 구조체 1]
- * @param  b [프로세스 구조체 2]
- * @return   [비교 결과]
+ * [compare_by_return_time Khai báo hàm so sánh dựa trên thời gian trả về]
+ * @param  a [Cấu trúc tiến trình 1]
+ * @param  b [Cấu trúc tiến trình 2]
+ * @return   [Kết quả so sánh]
  */
 int compare_by_return_time(const void *a, const void *b)
 {
-	/* const void 형 변수 형 변환 */
+	/* Ép kiểu biến sang dạng const void */
 	Process *ptA = (Process *)a;
 	Process *ptB = (Process *)b;
 
-	/* ptA의 반환 시간이 작을 경우 */
+	/* Trong trường hợp thời gian trả về của ptA nhỏ hơn, */
 	if (ptA->return_time < ptB->return_time)
 		return -1;
-		// -1 반환
+		// Trả về -1
 
-	/* ptA의 반환 시간이 클 경우 */
+	/* Trong trường hợp thời gian trả về của ptA lớn hơn, */
 	else if (ptA->return_time > ptB->return_time)
 		return 1;
-		// 1 반환
+		// Trả về 1
 
-	/* 반환 시간이 같을 경우 -> 존재 X */
+	/* Trong trường hợp thời gian trả về bằng nhau */
 	else
 		return 0;
-		// 0 반환
+		// Trả về 0 
 }
 
 /**
- * [quick_sort_by_return_time 반환 시간 기준 퀵 정렬 함수]
- * @param p   [프로세스 구조체 배열]
- * @param len [프로세스 갯수]
+ * [quick_sort_by_return_time Hàm sắp xếp nhanh theo thời gian trả về]
+ * @param p   [Mảng cấu trúc tiến trình]
+ * @param len [Số lượng tiến trình]
  */
 void quick_sort_by_return_time(Process p[], int len)
 {
 	qsort(p, len, sizeof(Process), compare_by_return_time);
-	// 내장 함수인 qsort 함수 호출 compare_by_return_time 함수로 반환 시간으로 비교
+	// Gọi hàm qsort, sử dụng hàm so sánh compare_by_return_time để so sánh thời gian trả về.
 }
 
 /**
- * [merge 분할된 배열 합병 함수]
- * @param arr   [정렬할 배열]
- * @param left  [배열의 가장 왼쪽 인덱스]
- * @param mid   [배열의 가운데 인덱스]
- * @param right [배열의 가장 오른쪽 인덱스]
+ * [merge Hàm hợp nhất các mảng đã chia]
+ * @param arr   [Mảng cần sắp xếp]
+ * @param left  [Chỉ số bên trái của mảng]
+ * @param mid   [Chỉ số giữa của mảng]
+ * @param right [Chỉ số bên phải của mảng]
  */
 void merge(Process arr[], int left, int mid, int right)
 {
 	int fIdx = left;
-	// 왼쪽 배열의 시작 인덱스를 저장할 변수 선언 및 초기화
+	// Khai báo và khởi tạo biến để lưu trữ chỉ số bắt đầu của mảng bên trái
 	int rIdx = mid + 1;
-	// 오른쪽 배열의 시작 인덱스를 저장할 변수 선언 및 초기화
+	// Khai báo và khởi tạo biến để lưu trữ chỉ số bắt đầu của mảng bên phải
 	int i;
-	// 반복문에서 사용할 변수 선언
+	// Khai báo biến sử dụng trong vòng lặp
 
 	Process *sortArr = (Process *)malloc(sizeof(Process) * (right + 1));
-	// 정렬된 배열을 저장할 배열 동작 할당
+	// Cấp phát bộ nhớ động để lưu trữ mảng đã sắp xếp
 	int sIdx = left;
 
-	/* left부터 mid까지의 블록과 mid + 1부터
-	   right까지의 블록을 비교하는 부분 */
+	/* So sánh các khối từ left đến mid và từ mid + 1 đến right */
 	while (fIdx <= mid && rIdx <= right)
 	{
-		/* left의 도칙시간이 right보다 작을 경우 */
+		/* Trường hợp thời gian đến của left nhỏ hơn thời gian đến của right */
 		if (arr[fIdx].arrive_time <= arr[rIdx].arrive_time)
 			sortArr[sIdx] = arr[fIdx++];
-			// left의 데이터를 결과 배열에 복사
+			// Sao chép dữ liệu của left vào mảng kết quả
 
-		/* 그렇지 않을 경우 */
+		/* Trong trường hợp ngược lại */
 		else
 			sortArr[sIdx] = arr[rIdx++];
-			// right의 데이터를 결과 배열에 복사
+			// Sao chép dữ liệu của right vào mảng kết quả
 
 		sIdx++;
-		// 결과 배열의 인덱스 증가
+		// Tăng chỉ số mảng kết quả lên
 	}
 
-	/* 오른쪽 배열의 데이터가 남아있는 경우 */
+	/* Trong trường hợp còn dữ liệu trong mảng bên phải */
 	if (fIdx > mid)
 	{
-		/* 오른쪽 배열의 남은 데이터 만큼 반복 */
+		/* Lặp lại cho đến khi hết dữ liệu */
 		for (i = rIdx; i <= right; i++, sIdx++)
 			sortArr[sIdx] = arr[i];
-			// 오른쪽 배열의 데이터를 결과 배열에 복사
+			// Sao chép dữ liệu của mảng bên phải vào mảng kết quả
 	}
 
-	/* 왼쪽 배열의 데이터가 남아있는 경우 */
+	/* Trong trường hợp còn dữ liệu trong mảng bên trái */
 	else
 	{
-		/* 왼쪽 배열의 남은 데이터 만큼 반복 */
+		/* Lặp lại cho đến khi hết dữ liệu */
 		for (i = fIdx; i <= mid; i++, sIdx++)
 			sortArr[sIdx] = arr[i];
-			// 왼쪽 배열의 데이터를 결과 배열에 복사
+			// Sao chép dữ liệu của mảng bên trái vào mảng kết quả
 	}
 
-	/* 배열의 데이터 개수만큼 반복 */
+	/* Lặp lại theo số lượng phần tử trong mảng */
 	for (i = left; i <= right; i++)
 		arr[i] = sortArr[i];
-		// 원본 배열에 복사
+		// Sao chép mảng gốc
 
 	free(sortArr);
-	// 배열 메모리 할당 해제
+	// Giải phóng bộ nhớ đã cấp phát cho mảng
 }
 
 /**
- * [merge_sort_by_arrive_time 도착 시간을 기준 합병 정렬 함수]
- * @param arr   [정렬할 배열]
- * @param left  [배열의 가장 왼쪽 인덱스]
- * @param right [배열의 가장 오른쪽 인덱스]
+ * [Gọi hàm merge_sort_by_arrive_time để thực hiện sắp xếp trộn dựa trên thời gian đến]
+ * @param arr   [Mảng cần sắp xếp]
+ * @param left  [Chỉ số bên trái của mảng]
+ * @param right [Chỉ số bên phải của mảng]
  */
 void merge_sort_by_arrive_time(Process arr[], int left, int right)
 {
 	int mid;
-	// 중간 지점 인덱스를 저장할 변수 선언
+	// Khai báo biến để lưu trữ chỉ số trung tâm
 
-	/* left가 right보다 작으면 실행 */
+	/* Nếu chỉ số bên trái nhỏ hơn chỉ số bên phải */
 	if (left < right)
 	{
-		/* 중간 지점을 계산한다 */
+		/* Tính chỉ số trung tâm */
 		mid = (left + right) / 2;
 
-		/* 둘로 나눠서 각각을 정렬한다 */
+		/* Chia mảng thành hai phần và sắp xếp mỗi phần */
 		merge_sort_by_arrive_time(arr, left, mid);
 		merge_sort_by_arrive_time(arr, mid + 1, right);
 
-		/* 정렬된 두 배열을 병합한다 */
+		/* Hợp nhất hai mảng đã sắp xếp */
 		merge(arr, left, mid, right);
 	}
 }
