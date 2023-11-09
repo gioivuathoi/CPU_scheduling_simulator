@@ -3,136 +3,136 @@
 
 // Shortest Remaining Time Algorithm
 
-/* 사용자 정의 헤더 선언 */
+/* Khai báo tiêu đề tùy chỉnh */
 #include "./Process.h"
 #include "./SortingFunction.h"
 #include "./PrintTable.h"
 
 /**
- * [srt_calculate_time SRT 알고리즘 시간 계산 함수]
- * @param p   [프로세스 구조체 배열]
- * @param len [프로세스 갯수]
+ * [srt_calculate_time Hàm tính toán thời gian thuật toán SRT]
+ * @param p   [mảng cấu trúc tiến trình]
+ * @param len [số lượng tiến trình]
  */
 void srt_calculate_time(Process *p, int len)
 {
 	int i;
-	// 반복문에서 사용할 변수 선언
+	// Khai báo biến để sử dụng trong vòng lặp
 	int current_time = 0;
-	// 현재 시간을 저장할 변수 선언 및 초기화
+	// Khai báo và khởi tạo biến để lưu trữ thời gian hiện tại
 	int total_burst_time = 0;
-	// 총 실행 시간을 저장할 변수 선언 및 초기화
+	// Khai báo và khởi tạo biến để lưu trữ tổng thời gian thực thi
 	int shortest_remain_time;
-	// 최소작업을 갖는 인덱스를 저장할 변수 선언
+	// Khai báo biến để lưu trữ chỉ số của phần tử có thời gian nhỏ nhất
 	int k = 0;
-	// 현재 실행중인 프로세스 번호를 저장할 변수 선언 및 초기화
+	// Khai báo và khởi tạo biến để lưu trữ số tiến trình đang thực thi hiện tại
 
-	/* 각 프로세스 별 남은 실행 시간을 저장할 배열 동적 할당 */
+	/* Cấp phát bộ nhớ động để lưu trữ thời gian còn lại của mỗi tiến trình */
 	int *remain_burst_time = (int *)malloc(sizeof(int) * len);
-	/* 응답 시간을 확인하는데 사용할 배열 동적 할당 */
+	/* Cấp phát bộ nhớ động của một mảng được sử dụng để kiểm tra thời gian phản hồi. */
 	int *count = (int *)malloc(sizeof(int) * len);
 
-	/* 프로세스의 갯수만큼 반복 */
+	/* Lặp lại theo số lượng tiến trình */
 	for (i = 0; i < len; i++)
 	{
 		count[i] = 0;
-		// count 배열 초기화
+		// Khởi tạo mảng count
 		remain_burst_time[i] = p[i].burst;
-		// remain_burst_time 배열 초기화
+		// Khởi tạo mảng remain_burst_time 
 		total_burst_time += p[i].burst;
-		// 총 남은 실행 시간 초기화
+		// Khởi tạo tổng thời gian thực thi còn lại
 	}
 
-	/* 현재 시간이 총 실행 시간이 되기 전까지 반복 */
+	/* Lặp cho đến khi thời gian hiện tại bằng tổng thời gian thực thi */
 	while (current_time < total_burst_time)
 	{
 		shortest_remain_time = INT_MAX;
-		// 최소작업 인덱스를 INT_MAX로 초기화
+		// Khởi tạo chỉ số của công việc nhỏ nhất với INT_MAX
 
-		/* 가장 마지막에 들어온 프로세스의 도착시간 보다 작을 경우 */
+		/* Nếu thời gian đến của công việc cuối cùng lớn hơn thời gian hiện tại */
 		if (current_time <= p[len - 1].arrive_time)
 		{
-			/* 프로세스의 갯수만큼 반복 */
+			/* Lặp lại theo số lượng tiến trình */
 			for (i = 0; i < len; i++)
 			{
-				/* 완료되지 않았으며 도착시간이 현재시간보다 작거나 같으며
-				   현재 최소작업 시간보다 남은 실행시간이 작을 경우 */
+				/* Nếu công việc chưa hoàn thành, và thời gian đến của nó nhỏ hơn hoặc bằng thời gian hiện tại, 
+    					và thời gian thực hiện còn lại ít hơn thời gian công việc tối thiểu hiện tại */
 				if ((p[i].completed == FALSE)
 						&& (p[i].arrive_time <= current_time)
 							&& (shortest_remain_time > remain_burst_time[i]))
 				{
 					shortest_remain_time = remain_burst_time[i];
-					// 최소 작업 시간 갱신
+					// Cập nhật thời gian thực hiện tối thiểu
 					k = i;
-					// 최소 작업 프로세스 인덱스 갱신
+					// Cập nhật chỉ số của tiến trình có thời gian thực hiện tối thiểu
 				}
 			}
 		}
 
-		/* 더 이상 새로운 프로세스가 들어오지 않는 경우 */
+		/* Trường hợp không còn tiến trình mới nào đến nữa */
 		else
 		{
-			/* 프로세스의 갯수만큼 반복 */
+			/* Lặp lại theo số lượng tiến trình */
 			for (i = 0; i < len; i++)
 			{
-				/* 완료되지 않았으며 현재 최소작업 시간보다
-				   남은 실행시간이 작을 경우 */
+				/* Nếu công việc chưa hoàn thành và thời gian thực hiện còn lại ít hơn thời gian thực hiện 
+    				tối thiểu hiện tại */
 				if ((p[i].completed == FALSE)
 						&& (shortest_remain_time > remain_burst_time[i]))
 				{
 					shortest_remain_time = remain_burst_time[i];
-					// 최소 작업 시간 갱신
+					// Cập nhật thời gian thực hiện tối thiểu
 					k = i;
-					// 최소 작업 프로세스 인덱스 갱신
+					// Cập nhật chỉ số của tiến trình có thời gian thực hiện tối thiểu
 				}
 			}
 		}
 
-		/* 선택된 프로세스가 처음 시작될 경우 */
+		/* Nếu tiến trình được chọn bắt đầu lần đầu tiên */
 		if (count[k] == 0)
 		{
 			count[k]++;
-			// 초기 실행이 아님을 표시
+			// Đánh dấu rằng đó không phải là lần thực thi đầu tiên
 			p[k].response_time = current_time;
-			// 실행중인 프로세스의 응답시간 저장
+			// Lưu trữ thời gian phản hồi của tiến trình đang thực hiện
 		}
 
 		remain_burst_time[k]--;
-		// 실행된 프로세스의 남은 시간 감소
+		// Giảm thời gian còn lại của tiến trình đã thực hiện
 		current_time++;
-		// 현재 시간 증가
+		// Tăng thời gian hiện tại
 
-		/* 프로세스의 남은 실행 시간이 0이될 경우 */
+		/* Nếu thời gian còn lại của tiến trình giảm xuống 0 */
 		if (remain_burst_time[k] == 0)
 		{
 			p[k].completed = TRUE;
-			// 완료 상태로 변경
+			// Đổi trạng thái thành đã hoàn thành
 			p[k].waiting_time = current_time - p[k].burst - p[k].arrive_time;
-			// 대기 시간 계산
+			// Tính toán thời gian chờ
 			p[k].return_time = current_time;
-			// 반환 시간 계산
+			// Tính toán thời gian trả về
 		}
 	}
 
-	/* 동적 할당한 배열의 메모리 할당 해제 */
+	/* Giải phóng bộ nhớ đã cấp phát cho mảng động */
 	free(count);
 	free(remain_burst_time);
 }
 
 /**
- * [srt_print_gantt_chart 간트 차트 출력 함수]
- * @param p   [프로세스 구조체 배열]
- * @param len [프로세스 갯수]
+ * [srt_print_gantt_chart Hàm in biểu đồ Gantt]
+ * @param p   [Mảng cấu trúc tiến trình]
+ * @param len [Số lượng tiến trình]
  */
 void srt_print_gantt_chart(Process *p, int len)
 {
 	int i;
 	int total_burst_time = 0;
 	int current_time = 0, previous_time;
-	// 이전 프로세스가 실행된 시간을 저장할 변수 추가 선언
+	// Khai báo thêm biến để lưu trữ thời gian tiến trình trước đó đã chạy
 	int k, pre_k = 0;
-	// 이전 프로세스 번호를 저장할 변수 추가 선언
+	// Khai báo thêm biến để lưu trữ số thứ tự của tiến trình trước đó
 	int shortest_remain_time, num;
-	// 새로 실행된 프로세스 사이 거리를 저장할 변수 선언
+	// Khai báo thêm biến để lưu trữ khoảng cách giữa hai tiến trình mới được chạy
 
 	int *count = (int *)malloc(sizeof(int) * len);
 	int *remain_burst_time = (int *)malloc(sizeof(int) * len);
@@ -147,7 +147,7 @@ void srt_print_gantt_chart(Process *p, int len)
 
 	printf("\t ");
 
-	/* 동일 알고리즘을 실행하며 상단 바 출력 */
+	/* In thanh tiêu đề trong khi thực hiện cùng một thuật toán */
 	while (current_time < total_burst_time)
 	{
 		shortest_remain_time = INT_MAX;
@@ -183,16 +183,16 @@ void srt_print_gantt_chart(Process *p, int len)
 			}
 		}
 
-		/* 이전에 실행된 프로세스와 다른 프로세스일 경우 */
+		/* Nếu tiến trình hiện tại khác với tiến trình đã thực hiện trước đó */
 		if (pre_k != k)
 			printf(" ");
-			// 공백 출력
+			// In dấu cách
 
 		printf("--");
 		remain_burst_time[k]--;
 		current_time++;
 		pre_k = k;
-		// 이전 프로세스 저장
+		// Lưu trữ tiến trình đã thực hiện trước đó
 
 		if (remain_burst_time[k] == 0)
 			p[k].completed = TRUE;
@@ -207,11 +207,11 @@ void srt_print_gantt_chart(Process *p, int len)
 	current_time = 0;
 	printf("\n\t|");
 
-	/* 동일 알고리즘을 실행하며 프로세스 아이디 출력
-	   이전 프로세스와 비교하며 \b 사용하여 간격 조절 */
+	/* Thực thi cùng một thuật toán và in ID tiến trình. 
+ 	So sánh với tiến trình trước đó và sử dụng \b để điều chỉnh khoảng cách */
 	while (current_time <= total_burst_time)
 	{
-		/* 현재 시간이 총 실행시간과 다를 경우 */
+		/* Nếu thời gian hiện tại khác với tổng thời gian thực thi */
 		if (current_time != total_burst_time)
 		{
 			shortest_remain_time = INT_MAX;
@@ -251,38 +251,38 @@ void srt_print_gantt_chart(Process *p, int len)
 
 			else
 			{
-				/* 이전 프로세스와 다른 프로세스일 경우 */
+				/* Nếu tiến trình hiện tại khác với tiến trình trước đó */
 				if (pre_k != k)
 				{
 					num = count[pre_k] + 1;
-					// 두 프로세스 시간 차이 저장
+					// Lưu trữ sự khác biệt về thời gian giữa hai tiến trình
 					count[pre_k] = 0;
-					// 이전 프로세스 카운트 초기화
+					// Khởi tạo lại bieens đếm của tiến trình trước đó
 					count[k]++;
-					// 현재 프로세스 카운트 증가
+					// Tăng biến đếm của tiến trình hiện tại
 
-					/* 두 프로세스 차이만큼 \b 출력 */
+					/* In dấu cách bằng với sự khác biệt về thời gian giữa hai tiến trình */
 					for (i = 0; i < num; i++)
 						printf("\b");
 
-					/* 이전 프로세스 ID 출력 */
+					/* In ID của tiến trình trước đó */
 					printf("%2s", p[pre_k].id);
 
-					/* 간격을 맞추어 공백 출력 */
+					/* In các khoảng trắng để điều chỉnh khoảng cách */
 					for (i = 0; i < num - 2; i++)
 						printf(" ");
 
 					printf("|  ");
 				}
 
-				/* 같은 프로세스일 경우 */
+				/* Nếu tiến trình hiện tại giống với tiến trình trước đó */
 				else
 				{
 					count[k]++;
-					// 현재 프로세스 카운트 증가
+					// Tăng biến đếm của tiến trình hiện tại
 
 					printf("  ");
-					// 공백 출력
+					// In dấu cách
 				}
 			}
 
@@ -294,22 +294,22 @@ void srt_print_gantt_chart(Process *p, int len)
 				p[k].completed = TRUE;
 		}
 
-		/* 현재 실행시간이 총 실행시간과 같을 경우 */
+		/* Nếu thời gian thực thi hiện tại bằng tổng thời gian thực thi */
 		else
 		{
-			/* 이전 실행 시간 만큼 \b 출력 */
+			/* In các dấu \b trong thời gian thực hiện trước đó */
 			for (i = 0; i < count[pre_k] + 1; i++)
 				printf("\b");
 
-			/* 현재 프로세스 ID 출력 */
+			/* In ID của tiến trình hiện tại */
 			printf("%2s", p[k].id);
 
-			/* 간격을 맞추어 공백 출력 */
+			/* In các khoảng trắng để điều chỉnh khoảng cách */
 			for (i = 0; i < count[pre_k] - 1; i++)
 				printf(" ");
 
 			break;
-			// 반복문 탈출
+			// Thoát khỏi vòng lặp
 		}
 	}
 
@@ -322,7 +322,7 @@ void srt_print_gantt_chart(Process *p, int len)
 	current_time = 0;
 	printf("|\n\t");
 
-	/* 동일 알고리즘을 사용하여 하단 바 출력 */
+	/* Sử dụng cùng một thuật toán để in thanh tiêu đề phía dưới */
 	while (current_time < total_burst_time)
 	{
 		shortest_remain_time = INT_MAX;
@@ -376,7 +376,7 @@ void srt_print_gantt_chart(Process *p, int len)
 	current_time = 0;
 	printf("\n\t");
 
-	/* 프로세스 ID 출력과 같은 방법으로 실행하며 시간 출력 */
+	/* In ID tiến trình và hiển thị thời gian tương tự */
 	while (current_time <= total_burst_time)
 	{
 		if (total_burst_time != current_time)
@@ -450,61 +450,61 @@ void srt_print_gantt_chart(Process *p, int len)
 
 	printf("\n");
 
-	/* 동적 할당한 배열 메모리 할당 해제 */
+	/* Giải phóng bộ nhớ đã cấp phát cho mảng động */
 	free(count);
 	free(remain_burst_time);
 }
 
 /**
- * [SRT SRT 알고리즘 실행 함수]
- * @param p   [프로세스 구조체 배열]
- * @param len [프로세스 갯수]
+ * [SRT  Gọi hàm SRT thực thi thuật toán]
+ * @param p   [Mảng cấu trúc tiến trình]
+ * @param len [Số lượng tiến trình]
  */
 void SRT(Process *p, int len)
 {
 	int i;
-	// 반복문에서 사용할 변수 선언
+	// Khai báo biến sử dụng trong vòng lặp
 	int total_waiting_time = 0;
-	// 총 대기 시간을 저장할 변수 선언 및 초기화
+	// Khai báo và khởi tạo biến để lưu trữ tổng thời gian chờ
 	int total_turnaround_time = 0;
-	// 총 턴어라운드 타임을 저장할 변수 선언 및 초기화
+	// Khai báo và khởi tạo biến để lưu trữ tổng thời gian turnaround
 	int total_response_time = 0;
-	// 총 응답 시간을 저장할 변수 선언 및 초기화
+	// Khai báo và khởi tạo biến để lưu trữ tổng thời gian phản hồi
 
 	process_init(p, len);
-	// process_init 함수 호출로 프로세스 초기화
+	// Gọi hàm process_init để khởi tạo tiến trình
 
 	merge_sort_by_arrive_time(p, 0, len);
-	// merge_sort_by_arrive_time 함수 호출로 도착 시간을 기준으로 정렬
+	// Gọi hàm merge_sort_by_arrive_time để sắp xếp theo thời gian đến
 
 	srt_calculate_time(p, len);
-	// srt_calculate_time 함수 호출로 프로세스 시간 계산
+	// Gọi hàm srt_calculate_time để tính thời gian của các tiến trình
 
-	/* 프로세스의 갯수 만큼 반복 */
+	/* Lặp lại theo số lượng tiến trình */
 	for (i = 0; i < len; i++)
 	{
 		p[i].turnaround_time = p[i].return_time - p[i].arrive_time;
-		// 턴어라운드 타임 계산
+		// Tính toán thời gian turnaround
 		total_waiting_time += p[i].waiting_time;
-		// 총 대기 시간 증가
+		// Tăng tổng thời gian chờ lên
 		total_turnaround_time += p[i].turnaround_time;
-		// 총 턴어라운드 타임 증가
+		// Tăng tổng thời gian turnaround lên
 		total_response_time += p[i].response_time;
-		// 총 응답 시간 증가
+		// Tăng tổng thời gian phản hồi lên
 	}
 
 	printf("\tShortest Remaining Time Algorithm\n\n");
 
 	srt_print_gantt_chart(p, len);
-	// srt_print_gantt_chart 함수 호출로 간트 차트 출력
+	// Gọi hàm srt_print_gantt_chart để in biểu đồ Gantt
 
-	/* 평균 대기시간, 턴어라운드 타임, 응답 시간 출력 */
+	/* In ra thời gian chờ trung bình, thời gian turnaround trung bình và thời gian phản hồi trung bình */
 	printf("\n\tAverage Waiting Time     : %-2.2lf\n", (double)total_waiting_time / (double)len);
 	printf("\tAverage Turnaround Time  : %-2.2lf\n", (double)total_turnaround_time / (double)len);
 	printf("\tAverage Response Time    : %-2.2lf\n\n", (double)total_response_time / (double)len);
 
 	print_table(p, len);
-	// print_table 함수 호출로 데이터 표 출력
+	// Gọi hàm print_table để in bảng dữ liệu
 }
 
 #endif
