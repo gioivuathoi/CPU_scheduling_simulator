@@ -26,7 +26,7 @@ int main()
     // 프로세스 구조체 배열을 동적 할당할 포인터 변수 선언
 
     /* 파일포인터 fp선언 및 process.txt를 읽기모드로 연다. */
-    FILE *fp = fopen("process.txt", "r");
+    FILE *fp = fopen("F:/Subjects/os/cpu-scheduling-simulator/process.txt", "r");
 
     /* 파일을 여는데 실패했을 경우 */
     if (fp == NULL)
@@ -100,4 +100,5 @@ int main()
 
     return 0;
     // 메인 함수 종료
+    
 }

@@ -4,7 +4,7 @@
 // Sorting Function
 
 /* 사용자 정의 헤더 선언 */
-impor
+#include "./Process.h"
 
 /**
  * [compare_by_return_time 반환 시간 기준 비교 함수]

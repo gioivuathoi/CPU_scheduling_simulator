@@ -39,7 +39,7 @@ void fcfs_print_gantt_chart(Process *p, int len)
 
 		printf("%s", p[i].id);
 
-		for (j = 0; j < p[i].burst - 1; j++)
+		for (j = 0; j < p[i].burst - 2; j++)
 			printf(" ");
 
 		printf("|");
