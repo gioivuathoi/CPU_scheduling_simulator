@@ -3,66 +3,66 @@
 
 // Non-preemptive Priority Scheduling Algorithm
 
-/* 사용자 정의 헤더 선언 */
+/* khai báo tiêu đề tuỳ chỉnh */
 #include "./Process.h"
 #include "./SortingFunction.h"
 #include "./PrintTable.h"
 
 /**
- * [npps_calculate NPPS 알고리즘 시간 계산 함수]
- * @param p   [프로세스 구조체 배열]
- * @param len [프로세스 갯수]
+ * [npps_calculate NPPS Hàm tính thời gian thuật toán]
+ * @param p   [mảng cấu trúc tiến trình]
+ * @param len [số lượng tiến trình]
  */
 void npps_calculate(Process *p, int len)
 {
 	int i, j;
-	// 반복문에서 사용할 변수 선언
+	// Khai báo các biến sử dụng trong vòng lặp
 	int check;
-	// 모든 프로세스가 완료되었는지 확인할 변수 선언
+	// Khai báo một biến để kiểm tra xem tất cả các tiến trình đã hoàn thành chưa
 	int min;
-	// 우선순위가 가장 높은 인덱스를 저장할 변수 선언
+	// Khai báo một biến để lưu trữ chỉ số ưu tiên cao nhất
 	int time = 0;
-	// 현재 시간을 저장할 변수 선언 및 초기화
+	// Khai báo và khởi tạo một biến để lưu trữ thời gian hiện tại
 
-	/* 가장 먼저 들어온 프로세스 실행 및 시간 계산 */
+	/* Thực hiện quá trình sớm nhất và tính toán thời gian của nó */
 	p[0].return_time = p[0].burst;
 	p[0].turnaround_time = p[0].return_time - p[0].arrive_time;
 	p[0].response_time = 0;
 	p[0].completed = TRUE;
 
 	time = p[0].burst;
-	// 실행된 프로세스 시간만큼 현재 시간 증가
+	// Tăng thời gian hiện tại theo thời gian tiến trình đã thực hiện
 
-	/* 모든 프로세스가 완료될때 까지 반복 */
+	/* Lặp lại cho đến khi tất cả các quá trình hoàn tất */
 	while (TRUE)
 	{
 		min = INT_MAX;
-		// 최솟값을 저장할 변수 초기화
+		// Khởi tạo một biến để lưu trữ giá trị nhỏ nhất
 		check = FALSE;
-		// 모든 프로세스 완료 확인 변수 초기화
+		// Xác nhận hoàn thành tất cả các quy trình Khởi tạo các biến
 
-		/* 프로세스의 갯수 -1 만큼 반복 */
+		/* Lặp lại nhiều lần bằng số lượng tiến trình -1 */
 		for (i = 1; i < len; i++)
 		{
-			/* 현재 우선순위 보다 작은 우선순위를 갖으며
-			   아직 실행되지 않았고 이미 도착한 프로세스인 경우 */
+			/* Có mức độ ưu tiên thấp hơn mức ưu tiên hiện tại
+			Nếu tiến trình chưa chạy và đã đến */
 			if ((p[min].priority > p[i].priority)
 				&& (p[i].completed == FALSE)
 					&& (p[i].arrive_time <= time))
 			{
 				min = i;
-				// 최소 우선순위 프로세스 인덱스 갱신
+				// Cập nhật chỉ mục tiến trình ưu tiên tối thiểu
 				check = TRUE;
-				// 실행할 프로세스가 남았음을 표시
+				// Chỉ ra rằng có những tiến trình còn lại để chạy
 			}
 		}
 
-		/* 모든 프로세스가 완료되었을 경우 */
+		/* Khi tất cả các quá trình được hoàn thành */
 		if (check == FALSE)
 			break;
-			// 반복문 탈출
+			// thoát vòng lặp
 
-		/* 선택된 프로세스 시간 계산 */
+		/* Tính toán thời gian tiến trình đã chọn */
 		p[min].response_time = time - p[min].arrive_time;
 		p[min].return_time = time + p[min].burst;
 		p[min].turnaround_time = p[min].return_time - p[min].arrive_time;
@@ -70,23 +70,23 @@ void npps_calculate(Process *p, int len)
 		p[min].completed = TRUE;
 
 		time += p[min].burst;
-		// 실행된 프로세스 시간 만큼 현재 시간 증가
+		// Tăng thời gian hiện tại theo thời gian tiến trình đã thực hiện
 	}
 }
 
 /**
- * [npps_print_gantt_chart 간트 차트 출력 함수]
- * @param p   [프로세스 구조체 배열]
- * @param len [프로세스 갯수]
+ * [npps_print_gantt_chart hiển thị biểu đồ Gantt]
+ * @param p   [mảng cấu trúc tiến trình]
+ * @param len [số lượng tiến trình]
  */
 void npps_print_gantt_chart(Process *p, int len)
 {
 	int i, j;
-	// 반복문에서 사용할 변수 선언
+	// Khai báo các biến sử dụng trong vòng lặp
 
 	printf("\t ");
 
-	/* 상단 바 출력 */
+	/* hiển thị đầu ra thanh trên cùng */
 	for (i = 0; i < len; i++)
 	{
 		for (j = 0; j < p[i].burst; j++)
@@ -97,7 +97,7 @@ void npps_print_gantt_chart(Process *p, int len)
 
 	printf("\n\t|");
 
-	/* 프로세스 ID 출력 */
+	/* Đầu ra ID tiến trình */
 	for (i = 0; i < len; i++)
 	{
 		for (j = 0; j < p[i].burst - 1; j++)
@@ -124,7 +124,7 @@ void npps_print_gantt_chart(Process *p, int len)
 
 	printf("\n\t");
 
-	/* 프로세스 시간 출력 */
+	/* hiển thị thời gian tiến trình */
 	printf("0");
 
 	for (i = 0; i < len; i++)
@@ -142,56 +142,54 @@ void npps_print_gantt_chart(Process *p, int len)
 }
 
 /**
- * [NPPS NPPS 알고리즘 실행 함수]
- * @param p   [프로세스 구조체 배열]
- * @param len [프로세스 갯수]
+ * [NPPS NPPS hàm thực thi thuật toán]
+ * @param p   [mảng cấu trúc tiến trình]
+ * @param len [số lượng tiến trình]
  */
 void NPPS(Process *p, int len)
 {
 	int i;
-	// 반복문에서 사용할 변수 선언
+	// Khai báo các biến sử dụng trong vòng lặp
 	int total_waiting_time = 0;
-	// 총 대기 시간을 저장할 변수 선언 및 초기화
+	// Khai báo và khởi tạo một biến để lưu tổng thời gian chờ
 	int total_turnaround_time = 0;
-	// 총 턴어라운드 타임을 저장할 변수 선언 및 초기화
+	//  Khai báo và khởi tạo biến để lưu trữ thời gian hoàn thành toàn bộ tiến trình
 	int total_response_time = 0;
-	// 총 응답 시간을 저장할 변수 선언 및 초기화
+	// Khai báo và khởi tạo một biến để lưu trữ tổng thời gian phản hồi
 
 	process_init(p, len);
-	// process_init 함수 호출로 프로세스 초기화
+	//  Khởi tạo một tiến trình bằng lệnh gọi hàm process_init
 
 	merge_sort_by_arrive_time(p, 0, len);
-	// merge_sort_by_arrive_time 함수 호출로 도착 시간을 기준으로 정렬
-
+	//  Sắp xếp theo thời gian đến với lệnh gọi hàm merge_sort_by_arrive_time
 	npps_calculate(p, len);
-	// npps_calculate 함수 호출로 시간 계산
+	//  Tính thời gian bằng lệnh gọi hàm npps_calculate
 
-	/* 프로세스의 갯수 만큼 반복 */
+	/* Lặp lại nhiều lần bằng số lượng tiến trình */
 	for (i = 0; i < len; i++)
 	{
 		total_waiting_time += p[i].waiting_time;
-		// 총 대기 시간 증가
+		// Tăng tổng thời gian chờ 
 		total_turnaround_time += p[i].turnaround_time;
-		// 총 턴어라운드 타임 증가
+		// Tăng tổng thời gian xử lý
 		total_response_time += p[i].response_time;
-		// 총 응답 시간 증가
+		// Tăng tổng thời gian phản hồi
 	}
 
 	quick_sort_by_return_time(p, len);
-	// quick_sort_by_return_time 함수 호출로 반환 시간으로 정렬
-
+	// Sắp xếp theo thời gian trả về theo lệnh gọi hàm quick_sort_by_return_time 
 	printf("\tNon-preemptive Priority Scheduling Algorithm\n\n");
 
 	npps_print_gantt_chart(p, len);
-	// npps_print_gantt_chart 함수 호출로 간트 차트 출력
+	// In biểu đồ Gantt bằng cách gọi hàm npps_print_gantt_chart
 
-	/* 평균 대기시간, 턴어라운드 타임, 응답 시간 출력 */
+	/* Thời gian chờ trung bình, thời gian hoàn thành, thời gian đáp ứng đầu ra */
 	printf("\n\tAverage Waiting Time     : %-2.2lf\n", (double)total_waiting_time / (double)len);
 	printf("\tAverage Turnaround Time  : %-2.2lf\n", (double)total_turnaround_time / (double)len);
 	printf("\tAverage Response Time    : %-2.2lf\n\n", (double)total_response_time / (double)len);
 
 	print_table(p, len);
-	// print_table 함수 호출로 데이터 표 출력
+	// In bảng dữ liệu bằng cách gọi hàm print_table
 }
 
 #endif
