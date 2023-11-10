@@ -1,7 +1,7 @@
 #ifndef __CPU__SCHEDULING__ALGORITHMS__
 #define __CPU__SCHEDULING__ALGORITHMS__
 
-/* 사용자 정의 헤더파일 선언 */
+/* Khai báo tệp tiêu đề tùy chỉnh */
 #include "./CpuSchedulingAlgorithmsModule/Process.h"
 #include "./CpuSchedulingAlgorithmsModule/FCFS.h"
 #include "./CpuSchedulingAlgorithmsModule/HRN.h"

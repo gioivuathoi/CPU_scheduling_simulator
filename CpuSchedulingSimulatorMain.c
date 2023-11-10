@@ -1,103 +1,92 @@
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- * Operating System Term Project                         *
- * CPU Scheduling Algorithm                              *
- *                                                       *
- * @author 김민수                                        *
- * @author 김혜린                                        *
- * @author 배서형                                        *
- *                                                       *
- * [Repository]                                          *
- * https://github.com/alstn2468/CPU_Scheduling_Simulator *
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-/* 사용자 정의 헤더파일 선언 */
+
+/* Khai báo tệp tiêu đề tùy chỉnh */
 #include "CpuSchedulingAlgorithms.h"
 
 int main()
 {
     int process_count = 0;
-    // 프로세스 갯수를 저장할 변수 선언 및 초기화
+    // Khai báo và khởi tạo một biến để lưu trữ số lượng tiến trình
     int i = 0;
-    // 반복문에서 사용할 변수 선언 및 초기화
+    //  Khai báo và khởi tạo các biến sử dụng trong vòng lặp
 
     Quantum quantum;
-    // 시간 할당량을 저장할 변수 선언
+    //  Khai báo biến để lưu trữ phân bổ thời gian
     Process *process;
-    // 프로세스 구조체 배열을 동적 할당할 포인터 변수 선언
+    // Khai báo một biến con trỏ để cấp phát động mảng cấu trúc tiến trình
 
-    /* 파일포인터 fp선언 및 process.txt를 읽기모드로 연다. */
+    /* Mở khai báo fp con trỏ tệp và process.txt ở chế độ đọc.  */
     FILE *fp = fopen("process.txt", "r");
 
-    /* 파일을 여는데 실패했을 경우 */
+    /* Nếu mở file không thành công */
     if (fp == NULL)
     {
         printf("FILE OPEN ERROR!\n");
-        return 0; // 예외 출력 후 메인 함수 종료
+        return 0; // Chấm dứt hàm chính sau khi xuất ngoại lệ
     }
 
     fscanf(fp, " %d", &process_count);
-    // 파일에서 정수형 데이터를 읽어와 process_count에 저장
+    // Đọc dữ liệu số nguyên từ file và lưu nó vào process_count
 
-    /* process_count 갯수만큼 프로세스 구조체 배열 동적 할당 */
+    /*  Cấp phát động mảng cấu trúc quy trình lên tới số process_count */
     process = (Process *)malloc(sizeof(Process) * process_count);
 
-    /* 프로세스 갯수만큼 반복 */
+    /* Lặp lại số lần bằng số tiến trình */
     while (i < process_count)
     {
         fscanf(fp, "%s %d %d %d",
                 process[i].id, &process[i].arrive_time, &process[i].burst, &process[i].priority);
-        // 파일에서 프로세스 데이터를 읽어와 배열에 저장
+        // Đọc dữ liệu tiến trình từ file và lưu vào mảng
         i++;
-        // 다음 배열로 이동
+        //  di chuyển tới mảng tiếp theo
     }
 
     fscanf(fp, " %d", &quantum);
-    // 파일에서 정수형 데이터를 읽어와 quantum에 저장
+    // Đọc dữ liệu số nguyên từ tệp và lưu trữ dưới dạng lượng tử
 
-    /* FCFS 함수 호출로 First Come First Served 알고리즘 실행 */
+    /* Thực thi thuật toán First Come First Served bằng cách gọi hàm FCFS  */
     puts("┏                                                                                                                             ┓\n\n");
     FCFS(process, process_count);
     puts("┗                                                                                                                             ┛\n\n");
 
-    /* SJF 함수 호출로 Shortest Job First 알고리즘 실행 */
+    /* Thực thi thuật toán Shortest Job First bằng cách gọi hàm SJF */
     puts("┏                                                                                                                             ┓\n\n");
     SJF(process, process_count);
     puts("┗                                                                                                                             ┛\n\n");
 
-    /* RR 함수 호출로 Round Robin 알고리즘 실행 */
+    /* Chạy thuật toán Round Robin bằng cách gọi hàm RR */
     puts("┏                                                                                                                             ┓\n\n");
     RR(process, process_count, quantum);
     puts("┗                                                                                                                             ┛\n\n");
 
-    /* HRN 함수 호출로 Highest Response Ratio Next 알고리즘 실행 */
+    /* Thực thi thuật toán Highest Response Ratio Next bằng cách gọi hàm HRN */
     puts("┏                                                                                                                             ┓\n\n");
     HRN(process, process_count);
     puts("┗                                                                                                                             ┛\n\n");
 
-    /* NPPS 함수 호출로 Non-Preemptive Priority Scheduling 알고리즘 실행 */
+    /* Thực thi thuật toán Non-Preemptive Priority Scheduling  bằng cách gọi hàm NPPS */
     puts("┏                                                                                                                             ┓\n\n");
     NPPS(process, process_count);
     puts("┗                                                                                                                             ┛\n\n");
 
-    /* PPS 함수 호출로 Preemptive Priority Scheduling 알고리즘 실행 */
+    /* Thực thi thuật toán Preemptive Priority Scheduling bằng cách gọi hàm PPS */
     puts("┏                                                                                                                             ┓\n\n");
     PPS(process, process_count);
     puts("┗                                                                                                                             ┛\n\n");
 
-    /* SRT 함수 호출로 Shortes Remaining Time 알고리즘 실행 */
+    /* Thực thi thuật toán Shortes Remaining Time bằng cách gọi hàm SRT */
     puts("┏                                                                                                                             ┓\n\n");
     SRT(process, process_count);
     puts("┗                                                                                                                             ┛\n\n");
 
     fclose(fp);
-    // 열어준 파일포인터 fp를 닫아준다.
+    // Đóng con trỏ file đang mở fp.
 
     free(process);
-    // 메모리 할당을 해준 프로세스 구조체 배열 할당 해제
+    // Giải phóng mảng cấu trúc tiến trình đã cấp phát bộ nhớ
 
     system("pause");
-    // 콘솔 창이 꺼지지 않도록 중지
-
+    // Ngăn không cho cửa sổ console tắt
     return 0;
-    // 메인 함수 종료
+    // kết thúc hàm chính
 }
