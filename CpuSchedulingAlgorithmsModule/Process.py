@@ -1,4 +1,3 @@
-
 class Process():
     def __init__(self, id:str, arrive_time:float, burst:float, priority:int) -> None:
         self.id = id    # ID của process sẽ là một sequence với chiều dài ID_LEN
