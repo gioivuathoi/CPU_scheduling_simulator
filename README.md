@@ -5,7 +5,7 @@
 ## Test Case
 Quantum : 2
 
-|PID|Arrive Time|Burst Time|Priority|
+|PID|Request Time|Burst Time|Priority|
 |:-:|:-:|:-:|:-:|
 |P0|3|5|2
 |P1|0|4|3|

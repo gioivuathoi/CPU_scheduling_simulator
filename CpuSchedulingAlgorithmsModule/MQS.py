@@ -1,2 +1,0 @@
-import CpuSchedulingAlgorithmsModule.SortingFunction as SortingFunction
-from CpuSchedulingAlgorithmsModule.PrintTable import print_table
