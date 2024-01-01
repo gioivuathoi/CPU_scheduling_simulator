@@ -4,7 +4,7 @@
 1. **Thịnh**: people said I am the leader of this project, but I prefer to be a server, a server found his happiness in his work
 2. **Nhật**: a gentle and kind guy, I think we have the same frequency, because we catch on each other pretty fast
 3. **Đạt**: a mysterious and very kind guy, mysterious thing because he rarely appear at class ;D
-## We use Python to simulate how CPU Scheduler works using GUI with pygame
+## We use Python to simulate CPU Schedulers works using GUI
 **This source code has**: *First come first serve (FCFS)*, *Shortest Job First (SJF)*, *Round Robin (RR)* and *Preemptive priority (PPS)* <br>
 *A little more details abour the algorithms*: with **SJF**, we use non-preemptive, **RR** of course it needs preemptive thing, for **PPS**, we update the priority of every process base on their waiting time. 
 ## What does the code can do?:
