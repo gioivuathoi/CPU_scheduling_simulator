@@ -23,7 +23,11 @@ pip install -r requirements.txt
 ```
 Now, we need to change two things to make the program work as wished: <br>
 1. **Choose algorithm**: At line 478 in __main.py__, there is a global variable *algo*, you need to set it with one of four string values: "**FCFS**", "**SJF**", "**RR**", "**PPS**" <br>
-2. **Set up test case**: The file contain our test case needs to has name __process.txt__ and on the same path root with file __main.py__. First line is number of process, next lines are informations of each process, first columns is the PID, second column is arrival time, third column is burst time, last column is priority. Last line need to be the quantum value, which will be use for Round Robin.
+2. **Set up test case**: The file contain our test case needs to has name __process.txt__ and on the same path root with file __main.py__. First line is number of process, next lines are informations of each process, first columns is the PID, second column is arrival time, third column is burst time, last column is priority. Last line need to be the quantum value, which will be use for Round Robin.<br>
+Last step, we just need to run our __main.py__: <br>
+```
+python main.py
+```
 
 ## Test :
 **Below is the test case we are using:**<br>
