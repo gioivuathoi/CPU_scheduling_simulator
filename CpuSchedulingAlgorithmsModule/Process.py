@@ -21,6 +21,7 @@ class Process():
         self.continue_run = 0            # Sử dụng cho thuật toán PPS, đánh dấu thời gian execution từ lần chạy trước
         self.continue_waiting = 0
         self.force_back_to_queue = 0
+        self.start_priority = priority
 
     def update_arrive_time(self, new_arrive_time):
         self.arrive_time = new_arrive_time
@@ -47,7 +48,7 @@ class Process():
         else:
             self.execution_time += exe_time
     def update_priority(self, add):
-        self.priority -= add
+        self.priority  = self.start_priority - add
     def update_on_cpu(self, value = True):
         self.on_cpu = value
     def update_request_time(self, current_time):
@@ -91,34 +92,41 @@ class ReadyQueue():
 
     def __SJF(self, current_time):
         # First, we need sort processes by their arrive time, but not the process with shortest-burt process at current time
-        mergeSort(self.P,0,len(self.P) - 1, "arrive")
-        # Next, we need to get all the process that has arrived
-        index = 0
-        for i, process in enumerate(self.P):
-            if process.arrive_time < current_time:
-                index =  i
-                break
-        # Because this is non-preemptive, so we do not sort the on_cpu process
-        if len(self.P) > 1:
+        if len(self.P) > 0:
             if self.P[-1].on_cpu:
-                temp = self.P[index:-1]
-                # Next, we sort the ready processes by their burst time
-                mergeSort(temp,0,len(temp) - 1,"burst")
-                self.P[index:-1] = temp
+                temp = self.P[:-1]
+                mergeSort(temp,0,len(temp) - 1,"arrive")
+                self.P[:-1] = temp
             else:
-                temp = self.P[index:]
-                # Next, we sort the ready processes by their burst time
-                mergeSort(temp,0,len(temp) - 1,"burst")
-                self.P[index:] = temp
+                mergeSort(self.P,0,len(self.P) - 1, "arrive")
+            # Next, we need to get all the process that has arrived
+            index = 0
+            for i, process in enumerate(self.P):
+                if process.arrive_time < current_time:
+                    index =  i
+                    break
+            # Because this is non-preemptive, so we do not sort the on_cpu process
+            if len(self.P) > 1:
+                if self.P[-1].on_cpu:
+                    temp = self.P[index:-1]
+                    # Next, we sort the ready processes by their burst time
+                    mergeSort(temp,0,len(temp) - 1,"burst")
+                    self.P[index:-1] = temp
+                else:
+                    temp = self.P[index:]
+                    # Next, we sort the ready processes by their burst time
+                    mergeSort(temp,0,len(temp) - 1,"burst")
+                    self.P[index:] = temp
         # else:
 
     def __RR(self, quantum = 5):
-        mergeSort(self.P,0,len(self.P) - 1, "arrive")
-        if not self.P[-1].on_cpu: 
-            if self.P[-1].remain_burst > quantum:
-                self.P[-1].quantum = quantum
-            else:
-                self.P[-1].quantum = self.P[-1].remain_burst
+        if len(self.P) > 0:
+            mergeSort(self.P,0,len(self.P) - 1, "arrive")
+            if not self.P[-1].on_cpu: 
+                if self.P[-1].remain_burst > quantum:
+                    self.P[-1].quantum = quantum
+                else:
+                    self.P[-1].quantum = self.P[-1].remain_burst
 
     def __PPS(self, quantum, current_time):
         # First, we need to sort the queue based on arrival time of each process
