@@ -180,7 +180,7 @@ def update_cpu_GUI(current_time, readyqueue, algorithm):
 				readyqueue.P[-1].update_waiting_time(current_time)
 			else:
 				percent = 100*readyqueue.P[-1].execution_time/readyqueue.P[-1].burst
-				if percent > 100:
+				if percent >= 100:
 					finish_process = readyqueue.pop_process()
 					finish_process.update_completed_state()
 					finish_process.update_return_time(current_time)
@@ -233,7 +233,7 @@ def update_cpu_GUI(current_time, readyqueue, algorithm):
 				if len(readyqueue.get_ready_queue()) > 1:
 					for i,process in enumerate(readyqueue.get_ready_queue()[:-1]):
 						if process.on_cpu == True:
-							print(process.id)
+							# print(process.id)
 							process.update_return_time(current_time)
 							readyqueue.P[i].update_on_cpu(value = False)
 							readyqueue.P[i].update_run_condition(run_for = readyqueue.P[i].execution_time)
@@ -241,23 +241,23 @@ def update_cpu_GUI(current_time, readyqueue, algorithm):
 							finish_processes.append(copy.deepcopy(process))
 						if process.arrive_time < current_time:
 							if readyqueue.P[i].continue_waiting == 0:
-								print("First ", process.id)
-								print(process.waiting_time)
+								# print("First ", process.id)
+								# print(process.waiting_time)
 								readyqueue.P[i].update_waiting_time(current_time)
 							else:
-								print("Second ", process.id)
+								# print("Second ", process.id)
 								readyqueue.P[i].update_waiting_time(current_time, continue_wait = True)
-							add_priority = readyqueue.P[i].waiting_time/30
+							add_priority = readyqueue.P[i].waiting_time/10
 							readyqueue.P[i].update_priority(add_priority)
 				readyqueue.P[-1].update_on_cpu()
 				readyqueue.P[-1].update_response_time(current_time)
 				readyqueue.P[-1].update_accept_time(current_time)
 				if readyqueue.P[-1].continue_waiting == 0:
-					print("First ", readyqueue.P[-1].id)
-					print(readyqueue.P[-1].waiting_time)
+					# print("First ", readyqueue.P[-1].id)
+					# print(readyqueue.P[-1].waiting_time)
 					readyqueue.P[-1].update_waiting_time(current_time)
 				else:
-					print("Second ", readyqueue.P[-1].id)
+					# print("Second ", readyqueue.P[-1].id)
 					readyqueue.P[-1].update_waiting_time(current_time, continue_wait = True)
 				# readyqueue.P[-1].update_waiting_time(current_time)
 			else:
@@ -475,7 +475,7 @@ with open("F:\Subjects\os\cpu-scheduling-simulator\process.txt","r") as f:
 # print(len(processes))
 GUI_readyqueue = ReadyQueue(processes)
 
-algo = "FCFS"
+algo = "PPS"
 start = time.time()
 finish_processes = []
 job_list = []
