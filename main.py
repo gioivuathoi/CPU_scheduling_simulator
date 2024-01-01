@@ -233,7 +233,7 @@ def update_cpu_GUI(current_time, readyqueue, algorithm):
 				if len(readyqueue.get_ready_queue()) > 1:
 					for i,process in enumerate(readyqueue.get_ready_queue()[:-1]):
 						if process.on_cpu == True:
-							# print(process.id)
+							print(process.id)
 							process.update_return_time(current_time)
 							readyqueue.P[i].update_on_cpu(value = False)
 							readyqueue.P[i].update_run_condition(run_for = readyqueue.P[i].execution_time)
@@ -241,14 +241,24 @@ def update_cpu_GUI(current_time, readyqueue, algorithm):
 							finish_processes.append(copy.deepcopy(process))
 						if process.arrive_time < current_time:
 							if readyqueue.P[i].continue_waiting == 0:
+								print("First ", process.id)
+								print(process.waiting_time)
 								readyqueue.P[i].update_waiting_time(current_time)
 							else:
+								print("Second ", process.id)
 								readyqueue.P[i].update_waiting_time(current_time, continue_wait = True)
 							add_priority = readyqueue.P[i].waiting_time/30
 							readyqueue.P[i].update_priority(add_priority)
 				readyqueue.P[-1].update_on_cpu()
 				readyqueue.P[-1].update_response_time(current_time)
 				readyqueue.P[-1].update_accept_time(current_time)
+				if readyqueue.P[-1].continue_waiting == 0:
+					print("First ", readyqueue.P[-1].id)
+					print(readyqueue.P[-1].waiting_time)
+					readyqueue.P[-1].update_waiting_time(current_time)
+				else:
+					print("Second ", readyqueue.P[-1].id)
+					readyqueue.P[-1].update_waiting_time(current_time, continue_wait = True)
 				# readyqueue.P[-1].update_waiting_time(current_time)
 			else:
 				percent = 100*(readyqueue.P[-1].execution_time/readyqueue.P[-1].burst)
@@ -278,7 +288,7 @@ def update_ready_queue_GUI(current_time, readyqueue, algorithm):
 	elif algorithm == "SJF":
 		readyqueue.update_queue("SJF", current_time)
 	elif algorithm == "RR":
-		readyqueue.update_queue("RR", quantum = 5)
+		readyqueue.update_queue("RR", quantum = quantum)
 	elif algorithm == "PPS":
 		readyqueue.update_queue("PPS", quantum = 5, current_time = current_time)
 	gui_processes = []
@@ -320,11 +330,15 @@ def update_job_table(job_list):
 		for job in job_list:
 			table_job.remove_row(job)
 		job_list = []
-		if len(finish_processes) > 6:
-			num = len(finish_processes) - 6
-			show_process = finish_processes[num:]
-		else:
-			show_process = finish_processes
+		show_process = []
+		for process in finish_processes:
+			if 100*process.execution_time/process.burst >= 100:
+				show_process.append(process)
+		if len(show_process) > 6:
+			num = len(show_process) - 6
+			show_process = show_process[num:]
+		# else:
+		# 	show_process = finish_processes
 		for process in show_process:
 			if 100*process.execution_time/process.burst >= 100:
 				job = table_job.add_row([process.id, int(process.arrive_time), int(process.burst),process.priority,int(process.response_time),int(process.return_time),int(process.waiting_time),int(process.turnaround_time)],
@@ -428,7 +442,7 @@ rect_queue_text = queue_text.get_rect()
 rect_cpu_text = cpu_text.get_rect()
 rect_gantt_text = gantt_text.get_rect()
 rect_queue_text.center = (300,70)
-rect_cpu_text.center = (680, 70)
+rect_cpu_text.center = (700, 70)
 rect_gantt_text.center = (750, 280)
 screen.blit(queue_text, rect_queue_text)
 screen.blit(cpu_text,rect_cpu_text)
@@ -460,8 +474,8 @@ with open("F:\Subjects\os\cpu-scheduling-simulator\process.txt","r") as f:
 
 # print(len(processes))
 GUI_readyqueue = ReadyQueue(processes)
-# keep game running till running is true
-algo = "RR"
+
+algo = "FCFS"
 start = time.time()
 finish_processes = []
 job_list = []
